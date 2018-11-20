@@ -16,5 +16,4 @@ Movie tools by Yitong, feel free to use and contribute
     -h, --help            show this help message and exit
     -t MULTITHREAD, --MultiThread MULTITHREAD
                           Number of thread to use, default = 1
-    --compressionOFF      Turn off compression if you are more CPU bound than IO bound (faster on a laptop with SSD). Of course it will
-                          increase final file sizes
+    --compressionOFF      Turn off compression if you are more CPU bound than IO bound (faster on a laptop with SSD). Of course it will increase final file sizes
