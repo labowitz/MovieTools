@@ -20,13 +20,12 @@ def saveEachPosWave(multiParaInput):
         posImg.append(img)
 
     posImg.sort(key=getImageInfo)
-    print(pos)
+    print('Working on: Pos#' + pos)
     
     imageFiles = []
     for timeP in posImg:
         file = Image.open(wDic+'\\'+timeP)
         imageFiles.append(file)
-    print(compressOpt)
     imageFiles[0].save(saveDic+pos+'.tiff', compression=compressOpt, save_all=True, append_images=imageFiles[1:])
 
 
