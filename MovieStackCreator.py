@@ -99,10 +99,12 @@ if __name__ == '__main__':
         pos = getImageInfo(imageName)[1]
         positions.add(pos)
     
-    if not ospath.isdir(wDic+'\\EachPosWave'):
-        mkdir(wDic+'\\EachPosWave')
+    # Make the folder
+    folderName = "NormedMovieStack" if normOpt else "RawMovieStack"
+    if not ospath.isdir(wDic+'\\{0}'.format(folderName)):
+        mkdir(wDic+'\\{0}'.format(folderName))
 
-    multiPara = list(zip(list(positions), [allImages]*len(positions), [wDic]*len(positions), [wDic+'\\EachPosWave\\']*len(positions), [compressOpt]*len(positions), [normOpt]*len(positions)))
+    multiPara = list(zip(list(positions), [allImages]*len(positions), [wDic]*len(positions), [wDic+'\\{0}\\'.format(folderName)]*len(positions), [compressOpt]*len(positions), [normOpt]*len(positions)))
 
     # Processing the images
     if multiP:
