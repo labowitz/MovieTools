@@ -37,7 +37,7 @@ def normalizeStack(imgStack):
 
 def saveEachPosWave(multiParaInput):
     pos, allImages, wDic, saveDic, compressOpt, normalize= multiParaInput
-    posReg = re.compile('\w+_'+pos+'_')
+    posReg = re.compile(r'\w+_'+pos+'_')
     posImg = []
     for img in [imgName for imgName in allImages if posReg.match(imgName)]:
         posImg.append(img)
