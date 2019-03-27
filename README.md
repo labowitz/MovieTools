@@ -14,7 +14,8 @@ Or in general, the regex r'([^ _]+)_(w\d[^ _]+_s\d+)_t(\d+).TIF'
       -h, --help            show this help message and exit
       -t MULTITHREAD, --MultiThread MULTITHREAD
                             Number of thread to use, default = 1
-      --compressionOFF      Turn off compression if you are more CPU bound than IO bound (faster on a laptop with SSD). Of course it                                 will increase final file sizes
+      --compressionOFF      Turn off compression if you are more CPU bound than IO bound (faster on a laptop with SSD). 
+                            Of course it will increase final file sizes
       --normalize           Normalize across a each image using 1-99 percentile to 0~65535(16bit)
 
 
