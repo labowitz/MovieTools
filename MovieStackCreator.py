@@ -17,15 +17,13 @@ def getImageInfo(x):
 
 @jit
 def normalizeImg(frame, maxI, perc):
-    mini = np.percentile(frame, perc)
-    maxi = np.percentile(frame, 100-perc)
+    mini, maxi = np.percentile(frame, (perc, 100-perc))
 
     normFrame = (frame - mini) * maxI / (maxi - mini)
     normFrame[normFrame < 0] = 0
     normFrame[normFrame > maxI] = maxI
 
     return normFrame
-
 
 def normalizeStack(imgStack):
     stackArr = np.stack([np.array(im) for im in imgStack])
@@ -35,7 +33,6 @@ def normalizeStack(imgStack):
         normFrame = normalizeImg(frame, 65535, 1)
         imgStack.append(Image.fromarray(normFrame.astype(np.uint16)))
         # print(np.max(normFrame), np.min(normFrame))
-
     return imgStack
 
 def saveEachPosWave(multiParaInput):
@@ -108,7 +105,7 @@ if __name__ == '__main__':
 
     # Processing the images
     if multiP:
-        print("Starting {0} threads".format(mtNum))
+        print("Starting {0} threads......".format(mtNum))
         with Pool(mtNum) as p:
             p.map(saveEachPosWave, multiPara)
     else:
