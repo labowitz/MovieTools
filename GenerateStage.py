@@ -38,7 +38,7 @@ if __name__ == "__main__":
             wellX, wellY, posX, posY = wellPos
             posName = posNamePref + "_well{0:02d}_pos{1:02d}".format(wellX * args.D + wellY, posX * args.B + posY)
             absX = - posX * posInterv - wellX * wellDist
-            absY = - posY * posInterv - wellY * wellDist
+            absY = posY * posInterv + wellY * wellDist
 
             restString = "FALSE, -9999, TRUE, TRUE, 0, -1, \"\"\n"
 
