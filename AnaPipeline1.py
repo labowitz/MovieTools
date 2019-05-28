@@ -2,17 +2,18 @@ import argparse
 import os.path as ospath
 import re
 import subprocess
-import h5py
 from multiprocessing import Pool
 from os import listdir, mkdir
 
+import h5py
 import numpy as np
 from numba import jit
 from PIL import Image
 
+from utils.ImgUtils import loadstack, save2stack
+
 ilastik = r'C:\Program Files\ilastik-1.3.2post1\ilastik.exe'
  
-
 def generatStackList(wDic):
     stackRe = re.compile(r'(w\d[^ _]+)_(s\d+).tiff')
     stackPairDict = dict()
@@ -28,13 +29,12 @@ def generatStackList(wDic):
 
 
 def unpackStack(stackFile, output):
-    stack = Image.open(stackFile)
+    arrList = loadstack(stackFile)
     filePaths = []
-    for idx in range(stack.n_frames):
-        stack.seek(idx)
+    for idx, arr in enumerate(arrList):
         savePath = output + '/{0}_frame{1:04}.Tiff'.format(ospath.splitext(ospath.basename(stackFile))[0], idx)
         filePaths.append(savePath)
-        stack.save(savePath)
+        Image.fromarray(arr).save(savePath, compression = 'tiff_deflate')
     return filePaths
 
 
@@ -57,14 +57,13 @@ def stackProb(dic):
 
     for pos in posDict:
         posDict[pos].sort(key=(lambda name : probRe.search(name).group(2)))
-        imgList = []
+        arrList = []
         for maskName in posDict[pos]:
             h5file = h5py.File('{0}/{1}'.format(dic, maskName))
             probMask = np.array(h5file['exported_data'])[:, :, 0]
-            probMask = (probMask * 255).astype('uint16')
+            arrList.append((probMask * 255).astype('uint8'))
 
-            imgList.append(Image.fromarray(probMask))
-        imgList[0].save('{0}/{1}_prob.tiff'.format(dic, pos), save_all=True, append_images=imgList[1:])
+        save2stack(arrList, '{0}/{1}_prob.tiff'.format(dic, pos))
 
 
 if __name__ == '__main__':
@@ -104,7 +103,7 @@ if __name__ == '__main__':
     stackPairDict = generatStackList(wDic)
 
 
-    # splitImgs = unpackStack('./TestData/w1YFP-YM_s1.tiff', tempPath)
-    # runIlastik('./TestData/pixelClass.ilp', splitImgs)
+    splitImgs = unpackStack('./TestData/w1YFP-YM_s1.tiff', tempPath)
+    runIlastik('./TestData/pixelClass.ilp', splitImgs)
     stackProb('./pepeline1_temp')
     # print(splitImgs)
