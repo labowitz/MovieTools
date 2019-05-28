@@ -61,6 +61,7 @@ if __name__ == '__main__':
      Accepting file name example: MyExp1_w1YFP_s3_t15.TIF\
      Or in general, the regex r'([^ _]+)_(w\d[^ _]+_s\d+)_t(\d+).TIF'")
     parser.add_argument("WorkDic", help="The directory containing all the images (only ends with .TIF)")
+    parser.add_argument("-o", "--Output", help="The directory for stack output")    
     parser.add_argument("-t", "--MultiThread", type=int, default=1, help="Number of thread to use, default = 1")
     parser.add_argument('--compressionOFF', action='store_true', help="Turn off compression if you are more CPU bound than IO bound (faster on a laptop with SSD). \
     Of course it will increase final file sizes")
@@ -69,7 +70,13 @@ if __name__ == '__main__':
     
     # Handling parameters
     wDic = args.WorkDic
-    print("Start working in " +wDic)
+    print("Start working in " + wDic)
+
+    if args.Output:
+        oDic = args.Output
+    else:
+        oDic = wDic
+    print("Output to " + oDic)
 
     compressOpt = 'tiff_deflate'
     if args.compressionOFF:
@@ -98,10 +105,10 @@ if __name__ == '__main__':
     
     # Make the folder
     folderName = "NormedMovieStack" if normOpt else "RawMovieStack"
-    if not ospath.isdir(wDic+'\\{0}'.format(folderName)):
-        mkdir(wDic+'\\{0}'.format(folderName))
+    if not ospath.isdir(oDic+'\\{0}'.format(folderName)):
+        mkdir(oDic+'\\{0}'.format(folderName))
 
-    multiPara = list(zip(list(positions), [allImages]*len(positions), [wDic]*len(positions), [wDic+'\\{0}\\'.format(folderName)]*len(positions), [compressOpt]*len(positions), [normOpt]*len(positions)))
+    multiPara = list(zip(list(positions), [allImages]*len(positions), [wDic]*len(positions), [oDic+'\\{0}\\'.format(folderName)]*len(positions), [compressOpt]*len(positions), [normOpt]*len(positions)))
 
     # Processing the images
     if multiP:
