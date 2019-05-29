@@ -5,13 +5,29 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "pepline1",
+            "name": "Pipeline_ProbStack",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "${workspaceRoot}/Pipeline_ProbStack.py" ,
             "console": "integratedTerminal",
             "args": [
-                "./TestData/"
+                "-p",
+                "./TestData/pixelClass.ilp",
+                "./TestData"
+            ]
+        },
+        {
+            "name": "Pipeline_ProbStack_para",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceRoot}/Pipeline_ProbStack.py" ,
+            "console": "integratedTerminal",
+            "args": [
+                "-p",
+                "./TestData/pixelClass.ilp",
+                "-t",
+                "2",
+                "./TestData"
             ]
         }
     ]
