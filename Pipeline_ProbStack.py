@@ -39,9 +39,10 @@ def unpackStack(stackFile, output):
     return filePaths
 
 
-def runIlastik(ilastikProject, files):
+def runIlastik(ilastikProject, files, tempDir, posID):
     cmd = ' '.join([ilastik, '--headless', '--project={0}'.format(ilastikProject), ' '.join(files)])
-    subprocess.run(cmd)
+    with open('{0}\ilastik_log_{1}.log'.format(tempDir, posID), 'w+') as logf:
+        subprocess.run(cmd, stdout=logf, stderr=logf)
 
 
 def stackProb(dic, posID, output):
@@ -63,7 +64,7 @@ def stackProb(dic, posID, output):
 def mainPipe(posID, stackDict, ilastikProj, tempDir, oDir):
     print('Processing position {0}...'.format(posID))
     splitImgs = unpackStack(stackDict[posID][0], tempDir)
-    runIlastik(ilastikProj, splitImgs)
+    runIlastik(ilastikProj, splitImgs, tempDir, posID)
     stackProb(tempDir, posID, oDir)
 
 
