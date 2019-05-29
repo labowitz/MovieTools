@@ -72,9 +72,9 @@ def mainPipe(posID, stackDict, ilastikProj, tempDir, oDir):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="A script to run trained ilastik project on image stacks.\
-        For perfusion movie with YFP nuclei label and cytoplasmic RFP. \
-        Will get probablity labels from ilastik and thresholding for segmentaion and quantify RFP with dialtion.")    
+    parser = argparse.ArgumentParser(description="A script to run trained ilastik project on image stacks. Then output all the to probility stacks.\
+        This script is for perfusion movie with YFP nuclei labels and requires a pretrained ilastik project to do pixel classification.\
+        For the ilastik project, the output export should be .h5 files and the first label should be cells")    
     parser.add_argument("WorkDic", help="The directory containing all the image stacks (only ends with .tiff). Should be generated from MovieStackCreator.py")
     parser.add_argument("-p", "--Project", help="trained ilastik project")
     parser.add_argument("-o", "--Output", help="The directory for csv output")
