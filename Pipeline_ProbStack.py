@@ -40,8 +40,9 @@ def unpackStack(stackFile, output):
 
 
 def runIlastik(ilastikProject, files, tempDir, posID):
+    print('running ilastik for {0}'.format(posID))
     cmd = ' '.join([ilastik, '--headless', '--project={0}'.format(ilastikProject), ' '.join(files)])
-    with open('{0}\ilastik_log_{1}.log'.format(tempDir, posID), 'w+') as logf:
+    with open(r'{0}\ilastik_log_{1}.log'.format(tempDir, posID), 'w+') as logf:
         subprocess.run(cmd, stdout=logf, stderr=logf)
 
 
@@ -77,7 +78,8 @@ if __name__ == '__main__':
     parser.add_argument("WorkDic", help="The directory containing all the image stacks (only ends with .tiff). Should be generated from MovieStackCreator.py")
     parser.add_argument("-p", "--Project", help="trained ilastik project")
     parser.add_argument("-o", "--Output", help="The directory for csv output")
-    parser.add_argument("-t", "--MultiThread", type=int, default=1, help="Number of thread to use, default = 1")
+    parser.add_argument("-t", "--MultiThread", type=int, default=1, help="Number of thread to use, default = 1, this program is highly paralled because of ilastik \
+        so it's a better idea to put a quater of total thread number")
     parser.add_argument("--temp", default='./pipeline_temp', help="The directory for temp files")
 
     args = parser.parse_args()
@@ -89,7 +91,7 @@ if __name__ == '__main__':
     if args.Output:
         oDir = ospath.normpath(args.Output)
     else:
-        oDir = ospath.normpath(wDic + '/pipeline_probStack_output')
+        oDir = ospath.normpath('./pipeline_probStack_output')
     if not ospath.exists(oDir):
         mkdir(oDir)
 
