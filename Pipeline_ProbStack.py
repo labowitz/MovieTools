@@ -118,6 +118,7 @@ if __name__ == '__main__':
         with Pool(mtNum) as p:
             p.map(mainPipeParal, [posID for posID in stackPairDict])
     else:
+        print('Single thread mode...')
         for posID in stackPairDict:
             mainPipe(stackPairDict[posID][0], posID, ilastikProject, tempPath, oDir)
              
