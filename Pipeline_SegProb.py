@@ -10,8 +10,11 @@ from os import listdir, mkdir
 import numpy as np
 from scipy import ndimage
 from skimage.feature import peak_local_max
+from collections import namedtuple
 
 from utils.ImgUtils import loadstack, save2stack
+
+pipeTuple = namedtuple('pipeOut', ['posID', 'count', 'measure'])
 
 def imgAllChannel(posID, probDir, dataDir):
     probRe = re.compile(r'{0}_prob.tiff'.format(posID))
@@ -66,7 +69,7 @@ def mainPipe(posID, workDir, tempDir, outDir, probDir, measureFunc=None):
     if measureFunc:
         measurement = measureFunc(counts, masks, mcStack)
 
-    return counts, measurement
+    return pipeTuple(posID, counts, measurement)
 
 def generateIDs(probDir):
     idList = []
