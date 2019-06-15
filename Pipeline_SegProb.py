@@ -14,7 +14,6 @@ from collections import namedtuple
 
 from utils.ImgUtils import loadstack, save2stack
 
-pipeTuple = namedtuple('pipeOut', ['posID', 'count', 'measure'])
 
 def imgAllChannel(posID, probDir, dataDir):
     probRe = re.compile(r'{0}_prob.tiff'.format(posID))
@@ -69,7 +68,7 @@ def mainPipe(posID, workDir, tempDir, outDir, probDir, measureFunc=None):
     if measureFunc:
         measurement = measureFunc(counts, masks, mcStack)
 
-    return pipeTuple(posID, counts, measurement)
+    return posID, counts, measurement
 
 def generateIDs(probDir):
     idList = []
