@@ -22,7 +22,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Distance between wells in a 24 well plate
-    wellDist = 18000
+    wellDist = 18900
 
     fileHeader = '\"Stage Memory List\", Version 6.0\n0, 0, 0, 0, 0, 0, 0, \"microns\", \"microns\"\n0\n'
     
