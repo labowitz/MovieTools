@@ -33,7 +33,7 @@ def imgAllChannel(posID, probDir, dataDir):
     
     return (probStack, YFPStack, RFPStack)
 
-def segProbStack(probStack, threshold = 31):
+def segProbStack(probStack, threshold = 20):
     counts = np.zeros(len(probStack), dtype=np.int16)
     masks = []
     for idx, img in enumerate(probStack):
