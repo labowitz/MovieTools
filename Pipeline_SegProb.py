@@ -33,11 +33,12 @@ def imgAllChannel(posID, probDir, dataDir):
     
     return (probStack, YFPStack, RFPStack)
 
-def segProbStack(probStack, threshold = 20):
+def segProbStack(probStack, threshold = 10):
     counts = np.zeros(len(probStack), dtype=np.int16)
     masks = []
     for idx, img in enumerate(probStack):
         labelOut = ndimage.label(ndimage.binary_opening(img > threshold))
+        # labelOut = ndimage.label(img > threshold)
         masks.append(labelOut[0])
         counts[idx] = labelOut[1]
     return masks, counts
@@ -116,7 +117,8 @@ if __name__ == "__main__":
     IDlist = generateIDs(probDir)
     if multiP:
         print("Starting {0} threads......".format(mtNum))
-        mainPipeParal = partial(mainPipe, workDir=wDir, tempDir=tempPath, outDir=oDir, probDir=probDir, measureFunc=cytoRFP)
+        # mainPipeParal = partial(mainPipe, workDir=wDir, tempDir=tempPath, outDir=oDir, probDir=probDir, measureFunc=cytoRFP)
+        mainPipeParal = partial(mainPipe, workDir=wDir, tempDir=tempPath, outDir=oDir, probDir=probDir)
         with Pool(mtNum) as p:
             pipeResult = p.map(mainPipeParal, IDlist)
     else:
