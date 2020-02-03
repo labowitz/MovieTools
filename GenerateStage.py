@@ -3,7 +3,7 @@ from itertools import product
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A script to generate a stage file for metamoreph. Be careful, this script also generate z-distance, so it will damage \
-        the objective if set too high. The generated pattern will be a AxB grid in CxD wells in 24 well plate, start from coodinate (0,0)")
+        the objective if set too high. The generated pattern will be a AxB grid in CxD wells in plate (24 well by default), start from coodinate (0,0)")
         
     parser.add_argument("A", type=int, help="Number positions in the x-axis for each well")
     parser.add_argument("B", type=int, help="Number positions in the y-axis for each well")
@@ -14,6 +14,8 @@ if __name__ == "__main__":
 
     parser.add_argument("-z", type=int, default=-400, help="z-distance of the objective in microns")
     parser.add_argument("-i", type=int, default=650., help="Intervals between different positions ")
+    parser.add_argument("-j", type=int, default=18900., help="Intervals between different wells (default=18900 is for 24-well ibidi)")
+
 
     parser.add_argument("-n", "--PosName", default='POS', help='Prefix of the position names')
 
@@ -22,7 +24,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Distance between wells in a 24 well plate
-    wellDist = 18900
 
     fileHeader = '\"Stage Memory List\", Version 6.0\n0, 0, 0, 0, 0, 0, 0, \"microns\", \"microns\"\n0\n'
     
@@ -30,6 +31,7 @@ if __name__ == "__main__":
     posNamePref = args.PosName
     zDist = args.z
     offset = args.offset
+    wellDist = args.j
 
     with open('{0}GeneratedStage.stg'.format(args.Output), 'w+') as f:
         f.write(fileHeader)
