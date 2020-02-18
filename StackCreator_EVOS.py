@@ -67,10 +67,6 @@ if __name__ == '__main__':
         oDir = wDir
     print("Output to " + oDir)
 
-    compressOpt = 'tiff_deflate'
-    if args.compressionOFF: 
-        print('No copression will be applied')
-        compressOpt = 'None'
 
     mtNum = args.MultiThread
 
