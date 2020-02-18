@@ -19,6 +19,10 @@ Or in general, the regex r'([^ _]+)_(w\d[^ _]+_s\d+)_t(\d+).TIF'
       --normalize           Normalize across a each image using 1-99 percentile to 0~65535(16bit)
 
 
+## MovieStackCreator_EVOS.py
+A script to combine seperated images from a timelapse movie taken by EVOS (most of time a montage)
+
+
 ## GenerateStage.py
 A script to generate a stage file for metamoreph. Be careful, this script also generate z-distance, so it will damage the objective if set too high. The generated pattern will be a AxB grid in CxD wells in 24 well plate, start from coodinate (0,0)
 
