@@ -26,7 +26,7 @@ def loadstack(stackFile, verb=True):
     
     return arrList
 
-def binImages(imgDir, binSize, outDir=None, prefix=''):
+def binImage(imgDir, binSize, outDir=None, prefix=''):
     img = imageio.imread(imgDir)
     arrImg = np.array(img)
     imgShape = (np.array(arrImg.shape) / binSize).astype(np.int)
@@ -36,4 +36,4 @@ def binImages(imgDir, binSize, outDir=None, prefix=''):
     if outDir:
         imageio.imwrite('{0}/{1}{2}_bin{3}.tiff'.format(outDir, prefix, imgDir[-7:-4], binSize), binedImg.astype(np.uint16))
 
-    return binedImg
+    return binedImg.astype(np.uint16)
