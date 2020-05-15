@@ -48,7 +48,11 @@ class plateData():
     }
     
     def __init__(self):
-        self.data = np.array([[np.nan] * 12] * 8)
+        self.data = np.array([[np.nan] * 12] * 8).tolist()
     
     def asignData(self, pos, data):
-        self.data[plateData.letterMap[pos[0]], int(pos[1:]) - 1] = data
+        self.data[plateData.letterMap[pos[0]]][int(pos[1:]) - 1] = data
+
+    def saveData(self, name):
+        arr = np.array(self.data)
+        np.save('{0}.npy'.format(name), arr)

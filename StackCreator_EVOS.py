@@ -5,11 +5,11 @@ from datetime import datetime
 from functools import partial
 from multiprocessing import Pool
 from os import listdir, mkdir
-from utils.ImgUtils import save2stack
+from utils.ImgUtils import save2stack, binImage
 
 import imageio
 import numpy as np
-from colorama import Back
+from colorama import Back, Style
 from numba import jit
 
 folderRe = re.compile(r'Scan \'[^\']+\' (\d\d\d\d-\d\d-\d\d \d\d.\d\d.\d\d)')
@@ -22,15 +22,17 @@ def getTimeInfo(x):
     return takeDate
 
 # Return a 3-D stack of a specific position
-def extractEachWell(pos, wDir, folderList, oDir):
+def extractEachWell(pos, wDir, folderList, oDir, binN=2):
+    print('Started processing position #{0}'.format(pos[0:-4]))
     allImgs = []
     shapes = []
     for folder in folderList:
-        img = imageio.imread('{0}/{1}/{2}'.format(wDir, folder, pos))
-        arrImg = np.array(img.astype(np.int16))
-        arrImg = arrImg.sum(2)
-        shapes.append(arrImg.shape)
-        allImgs.append(arrImg)
+        img = binImage('{0}/{1}/{2}'.format(wDir, folder, pos), binN)
+        # img = imageio.imread('{0}/{1}/{2}'.format(wDir, folder, pos))
+        # arrImg = np.array(img.astype(np.int16))
+        # arrImg = arrImg.sum(2)
+        shapes.append(img.shape)
+        allImgs.append(img)
     
     shapes = np.array(shapes)
     minShape = shapes.min(axis=0)
@@ -38,11 +40,10 @@ def extractEachWell(pos, wDir, folderList, oDir):
     allImgs = [img[0:minShape[0], 0:minShape[1]] for img in allImgs]
     arrImgStack = np.array(allImgs, dtype=np.uint16)
     
-    print('Finished processing position #{0}'.format(pos[0:-4]))
-
     save2stack(arrImgStack, '{0}/RawMovieStack/{1}.tiff'.format(oDir, pos[0:-4]))
     
-    return arrImgStack
+    print('Finished processing position #{0}'.format(pos[0:-4]))
+    return None
 
 
 if __name__ == '__main__':
@@ -59,6 +60,7 @@ if __name__ == '__main__':
     # Handling parameters
     wDir = args.WorkDir
     print(Back.RED + 'WARNING: The script is extreme RAM inefficient! But should be OK for movies with relative low frame rate.')
+    print(Style.RESET_ALL)
     print("Start working in " + wDir)
 
     if args.Output:
@@ -84,10 +86,12 @@ if __name__ == '__main__':
     # print(allSubFolders)
     positions = [well for well in listdir('{0}/{1}'.format(wDir, allSubFolders[0])) if wellRe.match(well)]
     positions = set(positions)
+
+    print("Totally {0} positions found: {1}".format(len(positions), positions))
     
     # Make the folder
-    if not ospath.isdir(oDir+'\\{0}'.format("RawMovieStack")):
-        mkdir(oDir+'\\{0}'.format("RawMovieStack"))
+    if not ospath.isdir(oDir+'/{0}'.format("RawMovieStack")):
+        mkdir(oDir+'/{0}'.format("RawMovieStack"))
 
     # Processing the images
     if multiP:
@@ -100,6 +104,3 @@ if __name__ == '__main__':
         allStacks = []
         for pos in positions:
             allStacks.append(extractEachWell(pos, wDir, allSubFolders, oDir))
-
-    stackShapes = np.array([stack.shape for stack in allStacks])
-    minStackShape = stackShapes.min(axis=0)
