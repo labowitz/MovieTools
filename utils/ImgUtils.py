@@ -2,6 +2,8 @@ from PIL import Image
 from os.path import normpath
 import numpy as np
 
+import imageio
+
 def save2stack(arrList, saveDir, verb=True):
     saveDir = normpath(saveDir)
     if verb:
@@ -23,3 +25,12 @@ def loadstack(stackFile, verb=True):
         arrList.append(np.array(stack))
     
     return arrList
+
+def binImages(imgDir, binSize, outDir, prefix=''):
+    img = imageio.imread(imgDir)
+    arrImg = np.array(img)
+    imgShape = (np.array(arrImg.shape) / binSize).astype(np.int)
+    arrImg = arrImg.sum(2)[0: binSize*imgShape[0], 0:binSize*imgShape[1]]
+    binedImg = arrImg.reshape(imgShape[0], binSize, imgShape[1], binSize).sum(3).sum(1)
+
+    imageio.imwrite('{0}/{1}{2}_bin{3}.tiff'.format(outDir, prefix, imgDir[-7:-4], binSize), binedImg.astype(np.uint16))
