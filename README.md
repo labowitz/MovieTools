@@ -1,6 +1,8 @@
 # MovieTools
-Movie tools by Yitong, feel free to use and contribute 
+Movie tools by Yitong, feel free to use and contribute.
+Now it is linux based. 
 
+Further script descripiton need to be update, look for help of each script.
 
 ## MovieStackCreator.py
 A script to combine seperated images from a timelapse movie taken by MetaMorph to tif image stacks. Accepting file name example: 
