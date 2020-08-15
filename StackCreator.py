@@ -8,7 +8,7 @@ from os import mkdir
 from multiprocessing import Pool
 from numba import jit
 
-
+from functools import partial
 
 def getImageInfo(x):
     timerunRe = re.compile(r'([^ _]+)_(w\d[^ _]+_s\d+)_t(\d+).TIF')
