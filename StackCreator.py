@@ -26,15 +26,6 @@ def normalizeImg(frame, maxI, perc):
 
     return normFrame
 
-# def normalizeStack(imgStack):
-#     stackArr = np.stack([np.array(im) for im in imgStack])
-
-#     imgStack = []
-#     for frame in stackArr:
-#         normFrame = normalizeImg(frame, 65535, 1)
-#         imgStack.append(Image.fromarray(normFrame.astype(np.uint16)))
-#         # print(np.max(normFrame), np.min(normFrame))
-#     return imgStack
 
 def saveEachPosWave(pos, allImages, wDic, saveDic):
     posReg = re.compile(r'\w+_'+pos+'_')
@@ -50,10 +41,7 @@ def saveEachPosWave(pos, allImages, wDic, saveDic):
         file = imageio.imread(wDic+'/'+timeP)
         imageFiles.append(file)
 
-    # if normalize:
-    #     imageFiles = normalizeStack(imageFiles)
-    imageio.mimsave(saveDic + pos + '.npz', imageFiles)
-    # imageFiles[0].save(saveDic+pos+'.tiff', compression=compressOpt, save_all=True, append_images=imageFiles[1:])
+    imageio.mimsave(saveDic + pos + '.tiff', imageFiles)
 
 
 if __name__ == '__main__':
@@ -63,9 +51,7 @@ if __name__ == '__main__':
     parser.add_argument("WorkDic", help="The directory containing all the images (only ends with .TIF)")
     parser.add_argument("-o", "--Output", help="The directory for stack output")    
     parser.add_argument("-t", "--MultiThread", type=int, default=1, help="Number of thread to use, default = 1")
-    # parser.add_argument('--compressionOFF', action='store_true', help="Turn off compression if you are more CPU bound than IO bound (faster on a laptop with SSD). \
-    # Of course it will increase final file sizes")
-    # parser.add_argument('--normalize', action='store_true', help='Normalize across a each image using 1-99 percentile to 0~65535(16bit)')
+
     args = parser.parse_args()
     
     # Handling parameters
@@ -77,11 +63,6 @@ if __name__ == '__main__':
     else:
         oDic = wDic
     print("Output to " + oDic)
-
-    # compressOpt = 'tiff_deflate'
-    # if args.compressionOFF:
-    #     print('No compression will be applied')
-    #     compressOpt = 'None'
 
     mtNum = args.MultiThread
 
