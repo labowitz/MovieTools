@@ -2,7 +2,7 @@ import re
 import argparse
 import os.path as ospath
 import numpy as np
-import imageio
+from tifffile import imread, imsave
 from os import listdir
 from os import mkdir
 from multiprocessing import Pool
@@ -28,12 +28,12 @@ def saveEachPosWave(pos, allImages, wDir, saveDir):
     
     imageFiles = []
     for timeP in posImg:
-        file = imageio.imread(wDir+'/'+timeP)
+        file = imread(wDir+'/'+timeP)
         imageFiles.append(file)
 
     stageMatch = stageReg.search(pos)
     saveLoc = '{0}/{1}{2:03d}.tiff'.format(saveDir, stageMatch.group(1), int(stageMatch.group(2)))
-    imageio.mimsave(saveLoc, imageFiles)
+    imsave(saveLoc, np.array(imageFiles), compress=6)
 
 
 if __name__ == '__main__':
