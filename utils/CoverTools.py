@@ -2,6 +2,8 @@ from scipy import ndimage
 from os.path import basename
 import numpy as np
 
+import warnings
+
 
 def clop(img):
     closed = ndimage.binary_closing(img)
@@ -15,8 +17,20 @@ def clopStack(imgStack):
     return np.array(cloped)
 
 def getConfl(fileDir):
-    probs = np.load(fileDir).astype(np.int16)
+    probs = np.load(fileDir)
+
+    if not probs.dtype is np.uint8:
+        warnings.warn('The loaded file ({0}) is not with dtype of \'uint8\', might cause problem in parsing'.format(fileDir))
+    
     cellMask = (probs[... ,0] - probs[... ,1]) < 0
+
+    if probs.shape[-1] > 2:
+        validMask = (probs[..., 2] < 128)
+        # print('here')
+    else:
+        validMask = np.ones(cellMask.shape)
+    # return validMask
+    cellMask = np.logical_and(cellMask, validMask)
 
     dim = cellMask.ndim
     if dim == 2:
@@ -24,7 +38,7 @@ def getConfl(fileDir):
     elif dim == 3:
         cellMask = clopStack(cellMask)
     
-    confl = (cellMask.sum(axis=(dim - 1, dim - 2)) + 1) / (cellMask.shape[dim - 1] * cellMask.shape[dim - 2])
+    confl = (cellMask.sum(axis=(dim - 1, dim - 2)) + 1) / (validMask.sum(axis=(dim - 1, dim - 2)) + 1)
 
     return confl
 
